@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 import Link from "next/link"
 
 interface ItemMenuProps {
@@ -38,35 +36,6 @@ export default function ItemMenu(props: ItemMenuProps) {
           </span>
         </a>
       )}
-
-=======
-=======
-import Link from "next/link"
-
->>>>>>> 21fa3e5 (feat: style ItemMenu)
-interface ItemMenuProps {
-  url: string
-  text: string
-  icon: any
+</li>)
 }
-export default function ItemMenu(props: ItemMenuProps) {
-  return (
-<<<<<<< HEAD
-    <li>
-      {props.icon}
->>>>>>> 92ce058 (feat: IteMIcons)
-=======
-    <li className={` hover:bg-gray-100`}>
-      <Link href={props.url} className={`
-        flex flex-col justify-center items-center
-        h-20 w-20
-      `}>
-          {props.icon}
-          <span className={` text-xs font-light text-gray-600`}>
-            {props.text}
-          </span>
-      </Link>
->>>>>>> 21fa3e5 (feat: style ItemMenu)
-    </li>
-  )
-}
+  
