@@ -6,8 +6,8 @@ export default function LateralMenu() {
     <aside>
       <ul>
         <ItemMenu url="/" text="Iníco" icon={HomeIcon}/>
-        <ItemMenu url="/ajustes" text="Ajustes" icon={AdjustmentsIcon}/>
-        <ItemMenu url="/notificacoes" text="Notificações" icon={BellIcon}/>
+        <ItemMenu url="/adjustments" text="Ajustes" icon={AdjustmentsIcon}/>
+        <ItemMenu url="/notifications" text="Notificações" icon={BellIcon}/>
       </ul>
     </aside>
   )
