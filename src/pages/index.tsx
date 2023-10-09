@@ -1,15 +1,9 @@
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import Layout from '@/components/template/Layout'
 
 export default function Home() {
   return (
-    <div className={`
-    flex justify-center items-center h-screen
-    bg-gradient-to-r from-green-500 to-blue-500
-    `
-    }>
-      <h1>Iniciando Projeto Admin</h1>
-    </div>
+    <Layout title='Página Inicial' subtitle='Estamos contruindo um template admin!'>
+      <h3>Conteúdo!!!!</h3>
+    </Layout>
   )
 }
