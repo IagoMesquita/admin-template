@@ -1,5 +1,4 @@
 import Layout from '@/components/template/Layout'
-import useAppData from '@/data/hooks/useAppData'
 
 export default function Notifications() {
   return (
