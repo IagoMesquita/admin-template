@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Link from "next/link"
 
 interface ItemMenuProps {
@@ -37,6 +38,17 @@ export default function ItemMenu(props: ItemMenuProps) {
         </a>
       )}
 
+=======
+interface ItemMenuProps {
+  url: string
+  text: string
+  icon: any
+}
+export default function ItemMenu(props: ItemMenuProps){
+  return (
+    <li>
+      {props.icon}
+>>>>>>> 92ce058 (feat: IteMIcons)
     </li>
   )
 }
