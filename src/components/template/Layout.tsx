@@ -11,8 +11,7 @@ interface LayoutProps {
 export default function Layout(props: LayoutProps) {
   return (
     <div className={`
-    flex h-screen w-screen border-2
-    border-red-500
+    flex h-screen w-screen 
      `
     }>
       <LateralMenu />
