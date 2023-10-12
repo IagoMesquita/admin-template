@@ -14,7 +14,9 @@ export default function Layout(props: LayoutProps) {
 
   return (
     <div className={`
+
     ${theme}
+
     flex h-screen w-screen 
      `
     }>
