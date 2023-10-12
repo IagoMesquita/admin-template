@@ -1,8 +1,11 @@
 import AuthInput from "@/components/auth/AuthInput";
+import { WarnIcon } from "@/components/icons";
 // import Image from "next/image";
 import { useState } from "react";
 
 export default function Authentication() {
+
+  const [error, setError] = useState<string | null>(null)
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -10,25 +13,43 @@ export default function Authentication() {
   function onSubmit() {
     if (mode === 'login') {
       console.log('Login')
+      displayError("Ocorreu um erro no Login")
     } else {
       console.log('Cadastrar')
-
+      displayError("Ocorreu um erro no Cadastro")
     }
   }
 
+  function displayError(msg: string, timeInSeconds = 5) {
+    setError(msg)
+    setTimeout(() => setError(null), timeInSeconds * 1000)
+  }
+
   return (
-    <div className="h-screen flex  items-center  justify-center ">
-      <div className="hidden md:block md:w-1/2">
+    <div className="h-screen flex  items-center">
+      <div className="hidden md:block md:w-1/2 lg:w-2/3">
         <img  
           src="https://source.unsplash.com/random"
           alt="Imagens aleatótias da tela de autenticação"
           className=" h-screen w-full object-cover"
         />
       </div>
-      <div className=" m-10 w-full md:w-1/2">
+      <div className=" m-10 w-full md:w-1/2 lg:w-1/3">
         <h1 className={`text-3xl font-bold mb-5`}>
           {mode === 'login' ? 'Entre com sua senha' : 'Cadastre-se na Plataforma'}
         </h1>
+            {error ? (
+              <div className={`
+              flex 
+              bg-red-400 text-white py-3 px-5 my-2
+              border border-red-700 rounded-lg
+            `}>
+              {WarnIcon()}
+              <span className="ml-3">{error}</span>
+            </div>
+  
+            ): null}
+          
         <AuthInput
           type="text"
           label="Email"
