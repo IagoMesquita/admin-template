@@ -1,14 +1,18 @@
 import AuthInput from "@/components/auth/AuthInput";
 import { WarnIcon } from "@/components/icons";
+import useAuth from "@/data/hooks/useAuth";
 // import Image from "next/image";
 import { useState } from "react";
 
 export default function Authentication() {
+  
+  const { user, loginGoogle } = useAuth()
 
   const [error, setError] = useState<string | null>(null)
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
 
   function onSubmit() {
     if (mode === 'login') {
@@ -76,7 +80,7 @@ export default function Authentication() {
 
         <hr className="my-6 border-gray-300 w-full" />
 
-        <button onClick={onSubmit}
+        <button onClick={loginGoogle}
           className={`
           w-full bg-red-500 hover:bg-red-400
           text-white rounded-lg px-4 py-3 
