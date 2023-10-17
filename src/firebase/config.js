@@ -1,5 +1,5 @@
 import firebase from "firebase/app";
-import 'firebase/auth';
+import "firebase/auth";
 
 if(!firebase.apps.length) {
   firebase.initializeApp({
@@ -10,3 +10,5 @@ if(!firebase.apps.length) {
 }
 
 export default firebase
+
+
