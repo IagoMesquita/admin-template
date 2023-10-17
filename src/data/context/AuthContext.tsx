@@ -2,7 +2,9 @@ import { createContext, useState } from 'react'
 import route from 'next/router'
 import User from '@/model/User'
 import firebase from '../../firebase/config'
+import Cookies from 'js-cookie'
 
+// https://www.npmjs.com/package/js-cookie
 
 interface AuthContextProps {
   user?: User
@@ -27,6 +29,18 @@ async function normalizedUser(userFirebase: firebase.User): Promise<User> {
 
   }
 }
+
+function manageCookies(isLogged: boolean) {
+  if(isLogged) {
+    Cookies.set('admin-template-cod3r-auth', `${isLogged}`, {
+      expires: 7
+    });
+  } else {
+    Cookies.remove('admin-template-cod3r-auth')
+  }
+}
+
+
 
 export function AuthProvider(props: Props) {
 
