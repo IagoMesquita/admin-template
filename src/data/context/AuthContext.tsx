@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import route from 'next/router'
 import User from '@/model/User'
 import firebase from '../../firebase/config'
@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 interface AuthContextProps {
   user?: User | undefined | null
   loginGoogle?: () => Promise<void>
+  logout?: () => Promise<void>
 }
 
 interface Props {
@@ -22,7 +23,7 @@ async function normalizedUser(userFirebase: firebase.User): Promise<User> {
   return {
     uid: userFirebase?.uid,
     name: userFirebase.displayName ?? '',
-    email: userFirebase!.email ?? '',
+    email: userFirebase.email ?? '',
     token,
     provider: userFirebase.providerData[0]?.providerId ?? '',
     imageUrl: userFirebase.photoURL ?? ''
@@ -40,14 +41,12 @@ function manageCookies(isLogged: boolean) {
   }
 }
 
-
-
 export function AuthProvider(props: Props) {
 
   const [user, setUser] = useState<User | undefined | null>()
   const [isLoading, setIsLoading] = useState(false)
 
-  async function configureSession(userFirebase: firebase.User) {
+  async function configureSession(userFirebase: any) {
     if (userFirebase?.email) {
       const user = await normalizedUser(userFirebase)
       setUser(user)
@@ -67,29 +66,46 @@ export function AuthProvider(props: Props) {
   async function loginGoogle() {
 
     try {
+      setIsLoading(true)
       const resp = await firebase.auth().signInWithPopup(
         new firebase.auth.GoogleAuthProvider()
       )
 
-      // se user vier nulo por algum motivo, "email" só será chamado se "user?" estiver diferente de nulo válido
-      if (resp.user?.email) {
-        const user = await normalizedUser(resp.user)
-        setUser(user)
-
-        route.push('/')
-      }
+        if(resp.user !== null) {
+          configureSession(resp.user)
+          route.push('/')
+        }
     } catch (error) {
       console.error("ERROR AQUIII", error)
+    } finally {
+      setIsLoading(false)
     }
 
-
   }
+
+  async function logout() {
+    try {
+      setIsLoading(true)
+      await firebase.auth().signOut()
+      await configureSession(null)
+      route.push('/authentication')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    // Funcão que diz quando hoube mudança no token do usuário, chamando a funcão configureService 
+    const cancel = firebase.auth().onIdTokenChanged(configureSession)
+    return () => cancel()
+  }, [])
 
 
   return (
     <AuthContext.Provider value={{
       user,
-      loginGoogle
+      loginGoogle,
+      logout,
     }}>
       {props.children}
     </AuthContext.Provider>
