@@ -18,12 +18,12 @@ const AuthContext = createContext<AuthContextProps>({})
 async function normalizedUser(userFirebase: firebase.User): Promise<User> {
   const token = await userFirebase.getIdToken()
   return {
-    uid: userFirebase.uid,
-    name: userFirebase!.displayName,
-    email: userFirebase!.email,
+    uid: userFirebase?.uid,
+    name: userFirebase.displayName ?? '',
+    email: userFirebase!.email ?? '',
     token,
-    provider: userFirebase.providerData[0]?.providerId,
-    imageUrl: userFirebase.photoURL
+    provider: userFirebase.providerData[0]?.providerId ?? '',
+    imageUrl: userFirebase.photoURL ?? ''
 
   }
 }
