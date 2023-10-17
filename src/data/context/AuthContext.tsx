@@ -7,7 +7,7 @@ import Cookies from 'js-cookie'
 // https://www.npmjs.com/package/js-cookie
 
 interface AuthContextProps {
-  user?: User
+  user?: User | undefined | null
   loginGoogle?: () => Promise<void>
 }
 
@@ -31,7 +31,7 @@ async function normalizedUser(userFirebase: firebase.User): Promise<User> {
 }
 
 function manageCookies(isLogged: boolean) {
-  if(isLogged) {
+  if (isLogged) {
     Cookies.set('admin-template-cod3r-auth', `${isLogged}`, {
       expires: 7
     });
@@ -44,7 +44,25 @@ function manageCookies(isLogged: boolean) {
 
 export function AuthProvider(props: Props) {
 
-  const [user, setUser] = useState<User>()
+  const [user, setUser] = useState<User | undefined | null>()
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function configureSession(userFirebase: firebase.User) {
+    if (userFirebase?.email) {
+      const user = await normalizedUser(userFirebase)
+      setUser(user)
+      manageCookies(true)
+      setIsLoading(false)
+
+      return user.email
+    } else {
+      setUser(null)
+      manageCookies(false)
+      setIsLoading(false)
+
+      return false
+    }
+  }
 
   async function loginGoogle() {
 
