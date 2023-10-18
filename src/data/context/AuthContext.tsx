@@ -8,6 +8,7 @@ import Cookies from 'js-cookie'
 
 interface AuthContextProps {
   user?: User | undefined | null
+  isLoading?: boolean
   loginGoogle?: () => Promise<void>
   logout?: () => Promise<void>
 }
@@ -44,7 +45,7 @@ function manageCookies(isLogged: boolean) {
 export function AuthProvider(props: Props) {
 
   const [user, setUser] = useState<User | undefined | null>()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   async function configureSession(userFirebase: any) {
     if (userFirebase?.email) {
@@ -71,10 +72,10 @@ export function AuthProvider(props: Props) {
         new firebase.auth.GoogleAuthProvider()
       )
 
-        if(resp.user !== null) {
-          configureSession(resp.user)
-          route.push('/')
-        }
+      if (resp.user !== null) {
+        configureSession(resp.user)
+        route.push('/')
+      }
     } catch (error) {
       console.error("ERROR AQUIII", error)
     } finally {
@@ -95,15 +96,20 @@ export function AuthProvider(props: Props) {
   }
 
   useEffect(() => {
-    // Funcão que diz quando hoube mudança no token do usuário, chamando a funcão configureService 
-    const cancel = firebase.auth().onIdTokenChanged(configureSession)
-    return () => cancel()
+    if (Cookies.get('admin-template-cod3r-auth')) {
+      // Funcão que diz quando hoube mudança no token do usuário, chamando a funcão configureService 
+      const cancel = firebase.auth().onIdTokenChanged(configureSession)
+      return () => cancel()
+    } else {
+      setIsLoading(false)
+    }
   }, [])
 
 
   return (
     <AuthContext.Provider value={{
       user,
+      isLoading,
       loginGoogle,
       logout,
     }}>
