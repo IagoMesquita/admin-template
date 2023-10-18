@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Image from "next/image"
 import loading from '@/../public/images/loading.gif'
 import useAuth from "@/data/hooks/useAuth"
@@ -11,27 +12,38 @@ export default function ForceAuthentication(props: any) {
   const renderContent = () => {
     return (
       <>
-        {props.children}
-      </>
-    )
+        <Head>
+          <script
+             dangerouslySetInnerHTML={{
+              __html: `if(!document.cookie?.includes('admin-template-cod3r-auth=true')) {
+                window.location.hrf = "/authentication"
+              }`
+             }} 
+          />
+
+
+          </Head >
+          {props.children}
+        </>
+        )
   }
 
   const renderLoading = () => {
     return (
-      <div className={`
+        <div className={`
         flex justify-center items-center h-screen
       `}>
-        <Image src={loading} alt="Gif de loading" />
-      </div>
-    )
+          <Image src={loading} alt="Gif de loading" />
+        </div>
+        )
   }
 
-  if (!isLoading && user?.email) {
+        if (!isLoading && user?.email) {
     return renderContent()
   } else if (isLoading) {
     return renderLoading()
   } else {
-    route.push('/authentication')
+          route.push('/authentication')
     return null
   }
 }
