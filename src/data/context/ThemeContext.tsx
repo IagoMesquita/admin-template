@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 
 type Theme = 'dark' | '';
 
-interface AppContextProps {
+interface ThemeContextProps {
   theme?: Theme;
   changeTheme?: () => void;
  
@@ -11,7 +11,7 @@ interface AppContextProps {
 interface Props {
   children: React.ReactNode;
 }
-const AppContext = createContext<AppContextProps>({})
+const ThemeContext = createContext<ThemeContextProps>({})
 
 
 export function AppProvider({ children }: Props) {
@@ -23,10 +23,10 @@ export function AppProvider({ children }: Props) {
   }
 
   return (
-    <AppContext.Provider value={{theme, changeTheme}}>
+    <ThemeContext.Provider value={{theme, changeTheme}}>
       {children}
-    </AppContext.Provider>
+    </ThemeContext.Provider>
   )
 }
 
-export default AppContext;
+export default ThemeContext;

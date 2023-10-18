@@ -1,4 +1,4 @@
-import { AppProvider } from '@/data/context/AppContext'
+import { AppProvider } from '@/data/context/ThemeContext'
 import type { AppProps } from 'next/app'
 import '@/styles/globals.css'
 import { AuthProvider } from '@/data/context/AuthContext'

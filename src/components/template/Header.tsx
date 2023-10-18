@@ -1,4 +1,4 @@
-import AppContext from "@/data/context/AppContext"
+import ThemeContext from "@/data/context/ThemeContext"
 import ButtonChangeTheme from "./ButtonChangeTheme"
 import Title from "./Title"
 import { useContext } from "react"
@@ -12,7 +12,7 @@ interface HeaderProps {
 
 export default function Header(props: HeaderProps) {
 
-  const {theme, changeTheme} = useContext(AppContext)
+  const {theme, changeTheme} = useContext(ThemeContext)
 
   return (
   
