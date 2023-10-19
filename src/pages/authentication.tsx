@@ -5,7 +5,7 @@ import useAuth from "@/data/hooks/useAuth";
 import { useState } from "react";
 
 export default function Authentication() {
-  
+
   const { user, loginGoogle } = useAuth()
 
   const [error, setError] = useState<string | null>(null)
@@ -32,28 +32,30 @@ export default function Authentication() {
   return (
     <div className="h-screen flex  items-center">
       <div className="hidden md:block md:w-1/2 lg:w-2/3">
-        <img  
-          src="https://source.unsplash.com/random"
-          alt="Imagens aleatótias da tela de autenticação"
-          className=" h-screen w-full object-cover"
-        />
+        <picture>
+          <img
+            src="https://source.unsplash.com/random"
+            alt="Imagens aleatótias da tela de autenticação"
+            className=" h-screen w-full object-cover"
+          />
+        </picture>
       </div>
       <div className=" m-10 w-full md:w-1/2 lg:w-1/3">
         <h1 className={`text-3xl font-bold mb-5`}>
           {mode === 'login' ? 'Entre com sua senha' : 'Cadastre-se na Plataforma'}
         </h1>
-            {error ? (
-              <div className={`
+        {error ? (
+          <div className={`
               flex 
               bg-red-400 text-white py-3 px-5 my-2
               border border-red-700 rounded-lg
             `}>
-              {WarnIcon()}
-              <span className="ml-3">{error}</span>
-            </div>
-  
-            ): null}
-          
+            {WarnIcon()}
+            <span className="ml-3">{error}</span>
+          </div>
+
+        ) : null}
+
         <AuthInput
           type="text"
           label="Email"
@@ -102,19 +104,19 @@ export default function Authentication() {
               Criar uma conta Gratuitamente.
             </a>
           </p>
-        ) :(
+        ) : (
           <p className="mt-8">
-          Já faz parte da nossa comunidade?
-          <a onClick={() => setMode('login')}
-            className={`
+            Já faz parte da nossa comunidade?
+            <a onClick={() => setMode('login')}
+              className={`
               text-blue-500 hover:text-blue-700 font-semibold
               cursor-pointer
               pl-2
             `}
-          >
-            Entre com suas Credenciais.
-          </a>
-        </p>
+            >
+              Entre com suas Credenciais.
+            </a>
+          </p>
         )}
 
       </div>
