@@ -48,7 +48,7 @@ function manageCookies(isLogged: boolean) {
 
 export function AuthProvider(props: Props) {
 
-  const [user, setUser] = useState<User | undefined | null>()
+  const [user, setUser] = useState<User | undefined | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   async function configureSession(userFirebase: firebaUser) {
@@ -75,16 +75,14 @@ export function AuthProvider(props: Props) {
       const resp = await firebase.auth().createUserWithEmailAndPassword(email, password)
 
       if (resp.user !== null) {
-        configureSession(resp.user)
+        await configureSession(resp.user)
         route.push('/')
       }
-    } catch (error) {
-      console.error("ERROR AQUIII", error)
     } finally {
       setIsLoading(false)
     }
 
-  }  
+  }
 
   async function login(email: string, password: string) {
 
@@ -92,17 +90,15 @@ export function AuthProvider(props: Props) {
       setIsLoading(true)
       const resp = await firebase.auth().signInWithEmailAndPassword(email, password)
 
-      if (resp.user !== null) {
-        configureSession(resp.user)
-        route.push('/')
-      }
-    } catch (error) {
-      console.error("ERROR AQUIII", error)
+
+      await configureSession(resp.user)
+      route.push('/')
+
     } finally {
       setIsLoading(false)
     }
 
-  }  
+  }
 
   async function loginGoogle() {
 
@@ -113,11 +109,9 @@ export function AuthProvider(props: Props) {
       )
 
       if (resp.user !== null) {
-        configureSession(resp.user)
+        await configureSession(resp.user)
         route.push('/')
       }
-    } catch (error) {
-      console.error("ERROR AQUIII", error)
     } finally {
       setIsLoading(false)
     }
@@ -128,7 +122,7 @@ export function AuthProvider(props: Props) {
     try {
       setIsLoading(true)
       await firebase.auth().signOut()
-      await configureSession(null)
+      await await configureSession(null)
       route.push('/authentication')
     } finally {
       setIsLoading(false)
