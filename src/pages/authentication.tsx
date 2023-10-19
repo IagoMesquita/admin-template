@@ -6,7 +6,7 @@ import { useState } from "react";
 
 export default function Authentication() {
 
-  const { user, loginGoogle } = useAuth()
+  const {register, login, loginGoogle,  user } = useAuth()
 
   const [error, setError] = useState<string | null>(null)
   const [mode, setMode] = useState<'login' | 'register'>('login')
@@ -14,19 +14,21 @@ export default function Authentication() {
   const [password, setPassword] = useState('')
 
 
-  function onSubmit() {
-    if (mode === 'login') {
-      console.log('Login')
-      displayError("Ocorreu um erro no Login")
-    } else {
-      console.log('Cadastrar')
-      displayError("Ocorreu um erro no Cadastro")
-    }
-  }
-
   function displayError(msg: string, timeInSeconds = 5) {
     setError(msg)
     setTimeout(() => setError(null), timeInSeconds * 1000)
+  }
+
+  async function onSubmit() {
+    try {
+      if (mode === 'login') {
+        login && await login(email, password)
+      } else {
+        register && await register(email, password)
+      }
+    } catch (error: string | any) {
+     displayError(error.message ?? 'Erro desconhecido')
+    }
   }
 
   return (
