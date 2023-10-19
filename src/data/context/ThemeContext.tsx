@@ -1,29 +1,35 @@
-import { createContext, useState } from "react";
-
-type Theme = 'dark' | '';
+import { createContext, useEffect, useState } from "react";
 
 interface ThemeContextProps {
-  theme?: Theme;
+  theme?: string;
   changeTheme?: () => void;
- 
 }
 
 interface Props {
   children: React.ReactNode;
 }
+
 const ThemeContext = createContext<ThemeContextProps>({})
 
+export function ThemeProvider({ children }: Props) {
 
-export function AppProvider({ children }: Props) {
-
-  const [theme, setTheme] = useState<Theme>('')
+  const [theme, setTheme] = useState('dark')
 
   function changeTheme() {
-      setTheme(theme === ''? 'dark' : '' );
+    const newValue = theme === '' ? 'dark' : ''
+    setTheme(newValue);
+    localStorage.setItem('theme', JSON.stringify(newValue))
   }
 
+  useEffect(() => {
+    const value = localStorage.getItem('theme') ?? '';
+
+    setTheme(JSON.parse(value))
+
+  }, [])
+
   return (
-    <ThemeContext.Provider value={{theme, changeTheme}}>
+    <ThemeContext.Provider value={{ theme, changeTheme }}>
       {children}
     </ThemeContext.Provider>
   )
