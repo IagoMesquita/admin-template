@@ -9,9 +9,13 @@ import Cookies from 'js-cookie'
 interface AuthContextProps {
   user?: User | undefined | null
   isLoading?: boolean
+  register?: (email: string, password: string) => Promise<void>
+  login?: (email: string, password: string) => Promise<void>
   loginGoogle?: () => Promise<void>
   logout?: () => Promise<void>
 }
+
+type firebaUser = firebase.User | null;
 
 interface Props {
   children: React.ReactNode;
@@ -23,11 +27,11 @@ async function normalizedUser(userFirebase: firebase.User): Promise<User> {
   const token = await userFirebase.getIdToken()
   return {
     uid: userFirebase?.uid,
-    name: userFirebase.displayName ?? '',
-    email: userFirebase.email ?? '',
+    name: userFirebase.displayName!,
+    email: userFirebase.email!,
     token,
-    provider: userFirebase.providerData[0]?.providerId ?? '',
-    imageUrl: userFirebase.photoURL ?? ''
+    provider: userFirebase.providerData[0]?.providerId!,
+    imageUrl: userFirebase.photoURL!
 
   }
 }
@@ -47,7 +51,7 @@ export function AuthProvider(props: Props) {
   const [user, setUser] = useState<User | undefined | null>()
   const [isLoading, setIsLoading] = useState(true)
 
-  async function configureSession(userFirebase: any) {
+  async function configureSession(userFirebase: firebaUser) {
     if (userFirebase?.email) {
       const user = await normalizedUser(userFirebase)
       setUser(user)
@@ -63,6 +67,42 @@ export function AuthProvider(props: Props) {
       return false
     }
   }
+
+  async function register(email: string, password: string) {
+
+    try {
+      setIsLoading(true)
+      const resp = await firebase.auth().createUserWithEmailAndPassword(email, password)
+
+      if (resp.user !== null) {
+        configureSession(resp.user)
+        route.push('/')
+      }
+    } catch (error) {
+      console.error("ERROR AQUIII", error)
+    } finally {
+      setIsLoading(false)
+    }
+
+  }  
+
+  async function login(email: string, password: string) {
+
+    try {
+      setIsLoading(true)
+      const resp = await firebase.auth().signInWithEmailAndPassword(email, password)
+
+      if (resp.user !== null) {
+        configureSession(resp.user)
+        route.push('/')
+      }
+    } catch (error) {
+      console.error("ERROR AQUIII", error)
+    } finally {
+      setIsLoading(false)
+    }
+
+  }  
 
   async function loginGoogle() {
 
@@ -97,7 +137,7 @@ export function AuthProvider(props: Props) {
 
   useEffect(() => {
     if (Cookies.get('admin-template-cod3r-auth')) {
-      // Funcão que diz quando hoube mudança no token do usuário, chamando a funcão configureService 
+      // Funcão que diz quando houve mudança no token do usuário, chamando a funcão configureService 
       const cancel = firebase.auth().onIdTokenChanged(configureSession)
       return () => cancel()
     } else {
@@ -110,6 +150,8 @@ export function AuthProvider(props: Props) {
     <AuthContext.Provider value={{
       user,
       isLoading,
+      register,
+      login,
       loginGoogle,
       logout,
     }}>
