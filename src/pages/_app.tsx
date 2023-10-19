@@ -1,4 +1,4 @@
-import { AppProvider } from '@/data/context/ThemeContext'
+import { ThemeProvider } from '@/data/context/ThemeContext'
 import type { AppProps } from 'next/app'
 import '@/styles/globals.css'
 import { AuthProvider } from '@/data/context/AuthContext'
@@ -6,9 +6,9 @@ import { AuthProvider } from '@/data/context/AuthContext'
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <AppProvider>
+      <ThemeProvider>
         <Component {...pageProps} />
-      </AppProvider>
+      </ThemeProvider>
     </AuthProvider>
   )
 }

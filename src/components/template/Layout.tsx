@@ -1,8 +1,8 @@
-import useAppData from "@/data/hooks/useAppData";
 import Content from "./Content";
 import Header from "./Header";
 import LateralMenu from "./LateralMenu";
 import ForceAuthentication from "../auth/ForceAuthentication";
+import useTheme from "@/data/hooks/useTheme";
 
 interface LayoutProps {
   title: string;
@@ -11,10 +11,10 @@ interface LayoutProps {
 }
 
 export default function Layout(props: LayoutProps) {
-  const { theme } = useAppData()
-
+  const { theme } = useTheme()
   return (
     <ForceAuthentication>
+      {/* <p className="flex justify-center text-xl">THEME useState: {theme}</p> */}
       <div className={`
         ${theme}
         flex h-screen w-screen 
